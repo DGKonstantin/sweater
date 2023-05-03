@@ -1,10 +1,9 @@
-package com.example.sweeterfull.controller;
+package com.example.sweterfull.controller;
 
-import com.example.sweeterfull.domen.Role;
-import com.example.sweeterfull.domen.User;
-import com.example.sweeterfull.repos.UserRepo;
+import com.example.sweterfull.domen.Role;
+import com.example.sweterfull.domen.User;
+import com.example.sweterfull.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +15,6 @@ import java.util.Collections;
 public class RegistrationController {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     UserRepo userRepo;
 
     @GetMapping("/registration")
@@ -27,19 +23,17 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, Model model){
+    public String addUser(User user,
+                          Model model ){
         User userFromDB = userRepo.findByUsername(user.getUsername());
 
         if(userFromDB != null){
-            model.addAttribute("message", "User exist!");
+            model.addAttribute("message", "User exist");
             return "registration";
         }
 
-        final String encodedPassword = passwordEncoder.encode(user.getPassword());
-
-//        user.setPassword(encodedPassword);
-        user.setEnabled(true);
-        user.setAuthority(Collections.singleton(Role.ROLE_USER));
+        user.setActive(true);
+        user.setRoles(Collections.singleton(Role.USER));
 
         userRepo.save(user);
 

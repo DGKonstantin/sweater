@@ -1,12 +1,11 @@
-package com.example.sweeterfull.domen;
+package com.example.sweterfull.domen;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serial;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
 
@@ -14,12 +13,12 @@ import java.util.Set;
 @Table(name = "users")
 public class User implements UserDetails {
 
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.AUTO)
-//    @Getter
-//    private Long id;
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+
     @Getter
     @Setter
     private String username;
@@ -30,18 +29,18 @@ public class User implements UserDetails {
 
     @Getter
     @Setter
-    private boolean enabled;
+    private boolean active;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "AUTHORITIES", joinColumns = @JoinColumn(name = "USERNAME"))
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Getter
     @Setter
-    private Set<Role> authority;
+    private Set<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getAuthorities();
+        return getRoles();
     }
 
     @Override
@@ -57,5 +56,10 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive();
     }
 }

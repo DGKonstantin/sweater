@@ -1,6 +1,6 @@
-package com.example.sweterFull2.repos;
+package com.example.sweterfull.repositories;
 
-import com.example.sweterFull2.domain.Message;
+import com.example.sweterfull.domen.Message;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

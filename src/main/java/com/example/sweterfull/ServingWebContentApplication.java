@@ -1,4 +1,4 @@
-package com.example.sweeterfull;
+package com.example.sweterfull;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
