@@ -24,9 +24,17 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Model model){
-        Iterable<Message> messages = messageRepo.findAll();
-        model.addAttribute("messages", messages);
+    public String main(@RequestParam(required = false, defaultValue = "") String filter,
+                       Model model){
+
+        Iterable<Message> messages;
+        if(filter != null && !filter.isEmpty()){
+            messages = messageRepo.findByTag(filter);
+        }else {
+            messages = messageRepo.findAll();
+        }
+        model.addAttribute("messages",messages);
+        model.addAttribute("filter", filter);
 
         return "main";
     }
@@ -35,25 +43,13 @@ public class MainController {
     public String addMessage(
                             @AuthenticationPrincipal User user,
                             @RequestParam String text,
-                            @RequestParam String tag,
-                             Model model){
-        Message message  = new Message(text, tag, user);
-        messageRepo.save(message);
-        return "main";
-    }
-
-    @PostMapping("/filter")
-    public String getMessagesByTag(
-                        @RequestParam String filter,
-                        Model model){
-        Iterable<Message> messages;
-        if(filter != null && !filter.isEmpty()){
-            messages = messageRepo.findByTag(filter);
-        }else {
-            messages = messageRepo.findAll();
+                            @RequestParam String tag){
+        if(!text.isEmpty()){
+            Message message  = new Message(text, tag, user);
+            messageRepo.save(message);
         }
-        model.addAttribute("messages",messages);
-        return "main";
+
+        return "redirect:/main";
     }
 
 
