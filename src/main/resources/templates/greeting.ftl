@@ -1,5 +1,6 @@
 <#import "parts/common.ftl" as c>
 
 <@c.page>
-<p><a href="/main">На Главную</a></p>
+<h5>Приветствую!</5>
+<div>Это просто клон твитера</div>
 </@c.page>
